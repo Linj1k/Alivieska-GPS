@@ -33,7 +33,8 @@ namespace AlivieskaGpsClient
 		private readonly string _hazardsPath = "resources\\hazards.csv";        // A CSV file containing information about road hazards
 		private readonly string _hazardsCustomPath = "resources\\hazards_custom.csv";        // A CSV file containing information about road hazards that the player marked
 		private readonly string _mapImagePath = "resources\\map.png";           // The map background image file
-		private Bitmap _baseImage = null;                           // The image to display on the form
+        private readonly string _mapnewImagePath = "resources\\map_new.jpg"; // The map background image file #2
+        private Bitmap _baseImage = null;                           // The image to display on the form
 		private Point _imageCenter;                                 // The center coordinates of the image
 		private int _prevX, _prevY;                                 // Used in calculating the delta position while panning the image
 		private Size _imageSize;                                    // The magnification of the image
@@ -308,6 +309,21 @@ namespace AlivieskaGpsClient
         private void Car_CheckedChanged(object sender, EventArgs e)
         {
             poiDisplayCheck_CheckedChanged(sender, e);
+        }
+
+        private void MapC_CheckedChanged(object sender, EventArgs e)
+        {
+            if (MapC.Checked)
+            {
+                _baseImage = new Bitmap(_mapnewImagePath);
+                MapC.Text = "Map 2/2";
+            }
+            else
+            {
+                _baseImage = new Bitmap(_mapImagePath);
+                MapC.Text = "Map 1/2";
+            }
+            mapImage.Invalidate();
         }
 
         // Update the form to display whatever data is currently present

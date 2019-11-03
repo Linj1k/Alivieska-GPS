@@ -40,6 +40,7 @@
             this.gpsConnectButton = new System.Windows.Forms.Button();
             this.zoomMultLabel = new System.Windows.Forms.Label();
             this.viewSettingsBox = new System.Windows.Forms.GroupBox();
+            this.Car = new System.Windows.Forms.CheckBox();
             this.Player = new System.Windows.Forms.CheckBox();
             this.displayHazardsCheck = new System.Windows.Forms.CheckBox();
             this.displayRoadHazardsCheck = new System.Windows.Forms.CheckBox();
@@ -55,7 +56,7 @@
             this.showRecordButton = new System.Windows.Forms.Button();
             this.mapImage = new System.Windows.Forms.PictureBox();
             this.aboutButton = new System.Windows.Forms.Button();
-            this.Car = new System.Windows.Forms.CheckBox();
+            this.MapC = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.zoomSlider)).BeginInit();
             this.gpsConnectionBox.SuspendLayout();
             this.viewSettingsBox.SuspendLayout();
@@ -88,7 +89,7 @@
             this.connectionUrlText.Name = "connectionUrlText";
             this.connectionUrlText.Size = new System.Drawing.Size(184, 27);
             this.connectionUrlText.TabIndex = 1;
-            this.connectionUrlText.Text = "http://localhost/8080";
+            this.connectionUrlText.Text = "http://localhost:8080";
             // 
             // label1
             // 
@@ -190,6 +191,20 @@
             this.viewSettingsBox.TabStop = false;
             this.viewSettingsBox.Text = "View settings";
             this.viewSettingsBox.Enter += new System.EventHandler(this.viewSettingsBox_Enter);
+            // 
+            // Car
+            // 
+            this.Car.AutoSize = true;
+            this.Car.Checked = true;
+            this.Car.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.Car.Location = new System.Drawing.Point(105, 183);
+            this.Car.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.Car.Name = "Car";
+            this.Car.Size = new System.Drawing.Size(48, 23);
+            this.Car.TabIndex = 10;
+            this.Car.Text = "Car";
+            this.Car.UseVisualStyleBackColor = true;
+            this.Car.CheckedChanged += new System.EventHandler(this.Car_CheckedChanged);
             // 
             // Player
             // 
@@ -396,17 +411,16 @@
             // 
             // checkBox1
             // 
-            this.Car.AutoSize = true;
-            this.Car.Checked = true;
-            this.Car.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.Car.Location = new System.Drawing.Point(105, 183);
-            this.Car.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.Car.Name = "Car";
-            this.Car.Size = new System.Drawing.Size(48, 23);
-            this.Car.TabIndex = 10;
-            this.Car.Text = "Car";
-            this.Car.UseVisualStyleBackColor = true;
-            this.Car.CheckedChanged += new System.EventHandler(this.Car_CheckedChanged);
+            this.MapC.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.MapC.AutoSize = true;
+            this.MapC.Location = new System.Drawing.Point(679, 593);
+            this.MapC.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.MapC.Name = "checkBox1";
+            this.MapC.Size = new System.Drawing.Size(77, 23);
+            this.MapC.TabIndex = 10;
+            this.MapC.Text = "Map 1/2";
+            this.MapC.UseVisualStyleBackColor = true;
+            this.MapC.CheckedChanged += new System.EventHandler(this.MapC_CheckedChanged);
             // 
             // MainForm
             // 
@@ -414,6 +428,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Lavender;
             this.ClientSize = new System.Drawing.Size(759, 620);
+            this.Controls.Add(this.MapC);
             this.Controls.Add(this.aboutButton);
             this.Controls.Add(this.showRecordButton);
             this.Controls.Add(this.followCheck);
@@ -471,6 +486,7 @@
         private System.Windows.Forms.TextBox gpsDataSpeed;
         private System.Windows.Forms.CheckBox Player;
         private System.Windows.Forms.CheckBox Car;
+        private System.Windows.Forms.CheckBox MapC;
     }
 }
 
