@@ -8,3 +8,5 @@ Extract AlivieskaGpsServer.dll to the mods folder.
 Extract Alivieska GPS client wherever you like.
 Start My Summer Car and the GPS client. (Create/Load Save)
 Click on "Connect" in the GPS client.
+
+Last release : https://www.racedepartment.com/downloads/alivieska-gps-updated-2019.29525/
