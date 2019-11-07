@@ -40,6 +40,15 @@ namespace AlivieskaGpsClient
 			g.DrawLine(pen, x, 0, x, size.Height);
 		}
 
+        public static void DrawImg(Graphics g, PointF Position, double angle, Point center, Size size, String Texture)
+        {
+            double rad = angle * Math.PI / -180.0;
+            float cos = (float)Math.Cos(rad);
+            float sin = (float)Math.Sin(rad);
+
+            g.DrawImage(new Bitmap(Texture), new Rectangle(Point.Subtract(new Point((int)(Position.X * size.Width + center.X), (int)(Position.Y * size.Height + center.Y)), new Size(26 / 2, 26 / 2)), new Size(26, 26)));
+        }
+
 		// Draw a cross spanning the entire area, intersecting at a given point
 		public static void DrawCross(Graphics g, Pen pen, Point intersect, Size size)
 		{

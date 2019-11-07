@@ -34,6 +34,8 @@ namespace AlivieskaGpsClient
 		private readonly string _hazardsCustomPath = "resources\\hazards_custom.csv";        // A CSV file containing information about road hazards that the player marked
 		private readonly string _mapImagePath = "resources\\map.png";           // The map background image file
         private readonly string _mapnewImagePath = "resources\\map_new.jpg"; // The map background image file #2
+        private readonly string _trainPath = "resources\\train.png"; // train icon
+        private readonly string _carPath = "resources\\car.png"; // car icon
         private Bitmap _baseImage = null;                           // The image to display on the form
 		private Point _imageCenter;                                 // The center coordinates of the image
 		private int _prevX, _prevY;                                 // Used in calculating the delta position while panning the image
@@ -58,6 +60,11 @@ namespace AlivieskaGpsClient
 			//_recordForm.Data = _gpsData
 			_recordForm = new RecordLocationForm(_gpsData);
 			_colorResetTimer.Elapsed += (o, args) => connectionStatusLabel.ForeColor = Color.ForestGreen;
+
+            gpsUpdateTimer.Start();
+			connectionUrlText.Enabled = false;
+			gpsConnectButton.Text = "Disconnect";
+			connectionStatusLabel.ForeColor = Color.Blue;
 		}
 
 		// Load resources; initialize pan and zoom
@@ -93,8 +100,17 @@ namespace AlivieskaGpsClient
 			if (_selectedPoi != null)
 				MapDrawing.DrawCross(e.Graphics, new Pen(Color.Black, 1.0f), _selectedPoi.MapLocation(_imageCenter, _imageSize), mapImage.Size);
 			if (_gpsData.Success)
-				MapDrawing.DrawArrow(e.Graphics, _gpsData.MapPosition, _gpsData.Heading, _imageCenter, _imageSize, Color.Orange, Car.Checked);
-                MapDrawing.DrawArrow(e.Graphics, _gpsData.PlayerPosition, _gpsData.PHeading, _imageCenter, _imageSize, Color.Blue, Player.Checked);
+                if (Car.Checked) {
+                    MapDrawing.DrawImg(e.Graphics, _gpsData.MapPosition, _gpsData.Heading, _imageCenter, _imageSize, _carPath);
+                }
+                if (_gpsData.PX != 0)
+                {
+                    MapDrawing.DrawArrow(e.Graphics, _gpsData.PlayerPosition, _gpsData.PHeading, _imageCenter, _imageSize, Color.Blue, Player.Checked);
+                }
+                if (_gpsData.TX != 0 & train.Checked)
+                {
+                    MapDrawing.DrawImg(e.Graphics, _gpsData.TrainPosition, 0, _imageCenter, _imageSize, _trainPath);
+                }
         }
 
 		// Set up previous coordinates for panning and handle point selection
@@ -326,6 +342,22 @@ namespace AlivieskaGpsClient
             mapImage.Invalidate();
         }
 
+        private void Rate_TextChanged(object sender, EventArgs e)
+        {
+            gpsUpdateTimer.Interval = Convert.ToInt32(Rate.Text);
+        }
+
+        private void ResetInterval_Click(object sender, EventArgs e)
+        {
+            gpsUpdateTimer.Interval = 1000;
+            Rate.Text = "1000";
+        }
+
+        private void train_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
         // Update the form to display whatever data is currently present
         public void UpdateGpsData()
 		{
@@ -333,7 +365,14 @@ namespace AlivieskaGpsClient
 			{
 				if (_gpsData.Success)
 				{
-					gpsDataSpeed.Text = _gpsData.Speed.ToString();
+                    if (TimeFormat.Checked)
+                    {
+                        GpsDataTime.Text = _gpsData.time24;
+                    }
+                    else
+                    {
+                        GpsDataTime.Text = _gpsData.time12;
+                    }
 
 					connectionStatusLabel.ForeColor = Color.LimeGreen;
 					_colorResetTimer.Start();

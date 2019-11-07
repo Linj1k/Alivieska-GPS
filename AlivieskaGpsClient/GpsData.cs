@@ -47,6 +47,14 @@ namespace AlivieskaGpsClient
             }
         }
 
+        public PointF TrainPosition
+        {
+            get
+            {
+                return new PointF(this.TX / this.Size.Width + this.Center.X, -this.TZ / this.Size.Height + this.Center.Y);
+            }
+        }
+
         public GpsData(MainForm form)
 		{
 			this._form = form;
@@ -57,7 +65,10 @@ namespace AlivieskaGpsClient
 		public float Y = 0;         // Height above lake Peräjärvi
 		public float Z = 0;         // North-south position
         public float Heading = 0;   // Angle from north in degrees
-        public float Speed = 0;     // Displayed speed of the car
+
+        //World
+        public string time24 = "";     // TimeIn24h
+        public string time12 = "";     // TimeIn12h
 
         // Player
         public float PX = 0;         // West-east position
@@ -65,7 +76,12 @@ namespace AlivieskaGpsClient
         public float PZ = 0;         // North-south position
         public float PHeading = 0;   // Angle from north in degrees
 
-		public string ResponseString;   // The raw string received from the server
+        // Train
+        public float TX = 0;         // West-east position
+        public float TY = 0;         // Height above lake Peräjärvi
+        public float TZ = 0;         // North-south position
+
+        public string ResponseString;   // The raw string received from the server
 		public bool Success = false;    // Indicates whether the request was successful
 		public HttpStatusCode Status;   // The status code of the response
 
@@ -93,11 +109,16 @@ namespace AlivieskaGpsClient
 				float.TryParse(_doc.DocumentElement["Y"].InnerText.Trim(), NumberStyles.Float, NumberFormatInfo.InvariantInfo, out Y);
 				float.TryParse(_doc.DocumentElement["Z"].InnerText.Trim(), NumberStyles.Float, NumberFormatInfo.InvariantInfo, out Z);
 				float.TryParse(_doc.DocumentElement["Heading"].InnerText.Trim(), NumberStyles.Float, NumberFormatInfo.InvariantInfo, out Heading);
-				float.TryParse(_doc.DocumentElement["Speed"].InnerText.Trim(), NumberStyles.Float, NumberFormatInfo.InvariantInfo, out Speed);
+                time24 = _doc.DocumentElement["time24"].InnerText;
+                time12 = _doc.DocumentElement["time12"].InnerText;
                 float.TryParse(_doc.DocumentElement["PX"].InnerText.Trim(), NumberStyles.Float, NumberFormatInfo.InvariantInfo, out PX);
                 float.TryParse(_doc.DocumentElement["PY"].InnerText.Trim(), NumberStyles.Float, NumberFormatInfo.InvariantInfo, out PY);
                 float.TryParse(_doc.DocumentElement["PZ"].InnerText.Trim(), NumberStyles.Float, NumberFormatInfo.InvariantInfo, out PZ);
                 float.TryParse(_doc.DocumentElement["PHeading"].InnerText.Trim(), NumberStyles.Float, NumberFormatInfo.InvariantInfo, out PHeading);
+
+                float.TryParse(_doc.DocumentElement["TX"].InnerText.Trim(), NumberStyles.Float, NumberFormatInfo.InvariantInfo, out TX);
+                float.TryParse(_doc.DocumentElement["TY"].InnerText.Trim(), NumberStyles.Float, NumberFormatInfo.InvariantInfo, out TY);
+                float.TryParse(_doc.DocumentElement["TZ"].InnerText.Trim(), NumberStyles.Float, NumberFormatInfo.InvariantInfo, out TZ);
             }
 			_form.UpdateGpsData();
 		}

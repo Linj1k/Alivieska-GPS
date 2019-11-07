@@ -36,7 +36,6 @@
             this.gpsConnectionBox = new System.Windows.Forms.GroupBox();
             this.connectionStatusLabel = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.gpsDataSpeed = new System.Windows.Forms.TextBox();
             this.gpsConnectButton = new System.Windows.Forms.Button();
             this.zoomMultLabel = new System.Windows.Forms.Label();
             this.viewSettingsBox = new System.Windows.Forms.GroupBox();
@@ -51,12 +50,17 @@
             this.displayJobsCheck = new System.Windows.Forms.CheckBox();
             this.displayTownsCheck = new System.Windows.Forms.CheckBox();
             this.gpsUpdateTimer = new System.Windows.Forms.Timer(this.components);
-            this.resetMapButton = new System.Windows.Forms.Button();
             this.followCheck = new System.Windows.Forms.CheckBox();
             this.showRecordButton = new System.Windows.Forms.Button();
             this.mapImage = new System.Windows.Forms.PictureBox();
             this.aboutButton = new System.Windows.Forms.Button();
             this.MapC = new System.Windows.Forms.CheckBox();
+            this.Rate = new System.Windows.Forms.TextBox();
+            this.ResetInterval = new System.Windows.Forms.Button();
+            this.train = new System.Windows.Forms.CheckBox();
+            this.TimeFormat = new System.Windows.Forms.CheckBox();
+            this.GpsDataTime = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.zoomSlider)).BeginInit();
             this.gpsConnectionBox.SuspendLayout();
             this.viewSettingsBox.SuspendLayout();
@@ -74,7 +78,7 @@
             this.zoomSlider.Minimum = 100;
             this.zoomSlider.Name = "zoomSlider";
             this.zoomSlider.Orientation = System.Windows.Forms.Orientation.Vertical;
-            this.zoomSlider.Size = new System.Drawing.Size(45, 464);
+            this.zoomSlider.Size = new System.Drawing.Size(45, 570);
             this.zoomSlider.SmallChange = 25;
             this.zoomSlider.TabIndex = 1;
             this.zoomSlider.TickFrequency = 10;
@@ -103,9 +107,9 @@
             // gpsConnectionBox
             // 
             this.gpsConnectionBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.gpsConnectionBox.Controls.Add(this.GpsDataTime);
             this.gpsConnectionBox.Controls.Add(this.connectionStatusLabel);
             this.gpsConnectionBox.Controls.Add(this.label6);
-            this.gpsConnectionBox.Controls.Add(this.gpsDataSpeed);
             this.gpsConnectionBox.Controls.Add(this.gpsConnectButton);
             this.gpsConnectionBox.Controls.Add(this.label1);
             this.gpsConnectionBox.Controls.Add(this.connectionUrlText);
@@ -135,16 +139,9 @@
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(7, 140);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(42, 19);
+            this.label6.Size = new System.Drawing.Size(43, 19);
             this.label6.TabIndex = 14;
-            this.label6.Text = "Speed";
-            // 
-            // gpsDataSpeed
-            // 
-            this.gpsDataSpeed.Location = new System.Drawing.Point(60, 137);
-            this.gpsDataSpeed.Name = "gpsDataSpeed";
-            this.gpsDataSpeed.Size = new System.Drawing.Size(100, 27);
-            this.gpsDataSpeed.TabIndex = 20;
+            this.label6.Text = "Time :";
             // 
             // gpsConnectButton
             // 
@@ -172,6 +169,8 @@
             // 
             this.viewSettingsBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.viewSettingsBox.Controls.Add(this.TimeFormat);
+            this.viewSettingsBox.Controls.Add(this.train);
             this.viewSettingsBox.Controls.Add(this.Car);
             this.viewSettingsBox.Controls.Add(this.Player);
             this.viewSettingsBox.Controls.Add(this.displayHazardsCheck);
@@ -186,7 +185,7 @@
             this.viewSettingsBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.viewSettingsBox.Name = "viewSettingsBox";
             this.viewSettingsBox.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.viewSettingsBox.Size = new System.Drawing.Size(198, 216);
+            this.viewSettingsBox.Size = new System.Drawing.Size(198, 278);
             this.viewSettingsBox.TabIndex = 5;
             this.viewSettingsBox.TabStop = false;
             this.viewSettingsBox.Text = "View settings";
@@ -197,7 +196,7 @@
             this.Car.AutoSize = true;
             this.Car.Checked = true;
             this.Car.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.Car.Location = new System.Drawing.Point(105, 183);
+            this.Car.Location = new System.Drawing.Point(105, 192);
             this.Car.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Car.Name = "Car";
             this.Car.Size = new System.Drawing.Size(48, 23);
@@ -211,7 +210,7 @@
             this.Player.AutoSize = true;
             this.Player.Checked = true;
             this.Player.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.Player.Location = new System.Drawing.Point(10, 183);
+            this.Player.Location = new System.Drawing.Point(10, 192);
             this.Player.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Player.Name = "Player";
             this.Player.Size = new System.Drawing.Size(63, 23);
@@ -337,18 +336,6 @@
             this.gpsUpdateTimer.Interval = 1000;
             this.gpsUpdateTimer.Tick += new System.EventHandler(this.gpsUpdateTimer_Tick);
             // 
-            // resetMapButton
-            // 
-            this.resetMapButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.resetMapButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.resetMapButton.Location = new System.Drawing.Point(488, 567);
-            this.resetMapButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.resetMapButton.Name = "resetMapButton";
-            this.resetMapButton.Size = new System.Drawing.Size(52, 35);
-            this.resetMapButton.TabIndex = 3;
-            this.resetMapButton.Text = "Reset";
-            this.resetMapButton.Click += new System.EventHandler(this.resetMapButton_Click);
-            // 
             // followCheck
             // 
             this.followCheck.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -367,7 +354,7 @@
             // 
             this.showRecordButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.showRecordButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.showRecordButton.Location = new System.Drawing.Point(548, 420);
+            this.showRecordButton.Location = new System.Drawing.Point(548, 482);
             this.showRecordButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.showRecordButton.Name = "showRecordButton";
             this.showRecordButton.Size = new System.Drawing.Size(190, 64);
@@ -386,7 +373,7 @@
             this.mapImage.Location = new System.Drawing.Point(14, 18);
             this.mapImage.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.mapImage.Name = "mapImage";
-            this.mapImage.Size = new System.Drawing.Size(466, 584);
+            this.mapImage.Size = new System.Drawing.Size(466, 646);
             this.mapImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.mapImage.TabIndex = 5;
             this.mapImage.TabStop = false;
@@ -409,30 +396,102 @@
             this.aboutButton.UseVisualStyleBackColor = true;
             this.aboutButton.Click += new System.EventHandler(this.aboutButton_Click);
             // 
-            // checkBox1
+            // MapC
             // 
             this.MapC.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.MapC.AutoSize = true;
-            this.MapC.Location = new System.Drawing.Point(679, 593);
+            this.MapC.Location = new System.Drawing.Point(679, 655);
             this.MapC.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.MapC.Name = "checkBox1";
+            this.MapC.Name = "MapC";
             this.MapC.Size = new System.Drawing.Size(77, 23);
             this.MapC.TabIndex = 10;
             this.MapC.Text = "Map 1/2";
             this.MapC.UseVisualStyleBackColor = true;
             this.MapC.CheckedChanged += new System.EventHandler(this.MapC_CheckedChanged);
             // 
+            // Rate
+            // 
+            this.Rate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.Rate.Location = new System.Drawing.Point(679, 590);
+            this.Rate.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.Rate.MaxLength = 4;
+            this.Rate.Name = "Rate";
+            this.Rate.Size = new System.Drawing.Size(68, 27);
+            this.Rate.TabIndex = 21;
+            this.Rate.Text = "1000";
+            this.Rate.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.Rate.TextChanged += new System.EventHandler(this.Rate_TextChanged);
+            // 
+            // ResetInterval
+            // 
+            this.ResetInterval.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.ResetInterval.Location = new System.Drawing.Point(679, 619);
+            this.ResetInterval.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.ResetInterval.Name = "ResetInterval";
+            this.ResetInterval.Size = new System.Drawing.Size(68, 27);
+            this.ResetInterval.TabIndex = 21;
+            this.ResetInterval.Text = "Reset";
+            this.ResetInterval.UseVisualStyleBackColor = true;
+            this.ResetInterval.Click += new System.EventHandler(this.ResetInterval_Click);
+            // 
+            // train
+            // 
+            this.train.AutoSize = true;
+            this.train.Checked = true;
+            this.train.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.train.Location = new System.Drawing.Point(10, 223);
+            this.train.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.train.Name = "train";
+            this.train.Size = new System.Drawing.Size(57, 23);
+            this.train.TabIndex = 11;
+            this.train.Text = "Train";
+            this.train.UseVisualStyleBackColor = true;
+            this.train.CheckedChanged += new System.EventHandler(this.train_CheckedChanged);
+            // 
+            // TimeFormat
+            // 
+            this.TimeFormat.AutoSize = true;
+            this.TimeFormat.Checked = true;
+            this.TimeFormat.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.TimeFormat.Location = new System.Drawing.Point(105, 223);
+            this.TimeFormat.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.TimeFormat.Name = "TimeFormat";
+            this.TimeFormat.Size = new System.Drawing.Size(80, 23);
+            this.TimeFormat.TabIndex = 12;
+            this.TimeFormat.Text = "24h/12h";
+            this.TimeFormat.UseVisualStyleBackColor = true;
+            // 
+            // GpsDataTime
+            // 
+            this.GpsDataTime.AutoSize = true;
+            this.GpsDataTime.Location = new System.Drawing.Point(52, 140);
+            this.GpsDataTime.Name = "GpsDataTime";
+            this.GpsDataTime.Size = new System.Drawing.Size(48, 19);
+            this.GpsDataTime.TabIndex = 15;
+            this.GpsDataTime.Text = "00h00";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(572, 593);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(102, 19);
+            this.label2.TabIndex = 16;
+            this.label2.Text = "Update Interval :";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Lavender;
-            this.ClientSize = new System.Drawing.Size(759, 620);
+            this.ClientSize = new System.Drawing.Size(759, 682);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.ResetInterval);
+            this.Controls.Add(this.Rate);
             this.Controls.Add(this.MapC);
             this.Controls.Add(this.aboutButton);
             this.Controls.Add(this.showRecordButton);
             this.Controls.Add(this.followCheck);
-            this.Controls.Add(this.resetMapButton);
             this.Controls.Add(this.viewSettingsBox);
             this.Controls.Add(this.zoomMultLabel);
             this.Controls.Add(this.mapImage);
@@ -470,7 +529,6 @@
 		private System.Windows.Forms.Label zoomMultLabel;
 		private System.Windows.Forms.GroupBox viewSettingsBox;
 		private System.Windows.Forms.Timer gpsUpdateTimer;
-		private System.Windows.Forms.Button resetMapButton;
 		private System.Windows.Forms.CheckBox followCheck;
 		private System.Windows.Forms.CheckBox displayTownsCheck;
 		private System.Windows.Forms.CheckBox displayJobsCheck;
@@ -483,10 +541,15 @@
 		private System.Windows.Forms.Button showRecordButton;
 		private System.Windows.Forms.Button aboutButton;
         private System.Windows.Forms.Label connectionStatusLabel;
-        private System.Windows.Forms.TextBox gpsDataSpeed;
         private System.Windows.Forms.CheckBox Player;
         private System.Windows.Forms.CheckBox Car;
         private System.Windows.Forms.CheckBox MapC;
+        private System.Windows.Forms.TextBox Rate;
+        private System.Windows.Forms.Button ResetInterval;
+        private System.Windows.Forms.CheckBox train;
+        private System.Windows.Forms.CheckBox TimeFormat;
+        private System.Windows.Forms.Label GpsDataTime;
+        private System.Windows.Forms.Label label2;
     }
 }
 
