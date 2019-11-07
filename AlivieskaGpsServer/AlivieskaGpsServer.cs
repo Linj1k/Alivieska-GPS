@@ -115,8 +115,8 @@ namespace AlivieskaGpsServer
 	{
 		public override string ID => "AlivieskaGpsServer";
 		public override string Name => "Alivieska GPS server";
-		public override string Author => "Wampa842";
-		public override string Version => "1.0.3";
+		public override string Author => "Wampa842 & Linj";
+		public override string Version => "1.0.5";
 		public override bool UseAssetsFolder => false;
         public override bool LoadInMenu => false;
 
@@ -127,7 +127,30 @@ namespace AlivieskaGpsServer
 
 		private GameObject _car;    // The Satsuma or whatever other GameObject needs to be tracked
 
-        private GameObject _player;
+        private GameObject _player; // The Player
+
+        private GameObject _train; // The Train
+
+        //Time In Game
+        private GameObject _sun;
+        private FsmFloat _rot;
+        private Transform _transH, _transM;
+        /// Based on the Sun's rotation, returns whether it's the afternoon.
+        public bool IsAfternoon => (_rot.Value > 330.0f || _rot.Value <= 150.0f);
+
+        /// Hour in day, 0 to 12 float.
+        public float Hour12F => ((360.0f - _transH.localRotation.eulerAngles.y) / 30.0f + 2.0f) % 12;
+        /// Hour in day, 0 to 24 float.
+        public float Hour24F => IsAfternoon ? Hour12F + 12.0f : Hour12F;
+        /// Minute in hour, 0 to 60 float.
+        public float MinuteF => (360.0f - _transM.localRotation.eulerAngles.y) / 6.0f;
+        /// Hour in day, 0 to 11 integer.
+        public int Hour12 => Mathf.FloorToInt(Hour12F);
+        /// Hour in day, 0 to 23 integer.
+        public int Hour24 => Mathf.FloorToInt(Hour24F);
+        /// Minute in hour, 0 to 59 integer.
+        public int Minute => Mathf.FloorToInt(MinuteF);
+
 
         private void _loadConfig()
 		{
@@ -183,12 +206,26 @@ namespace AlivieskaGpsServer
             float px = _player.transform.position.x;
             float py = _player.transform.position.y;
             float pz = _player.transform.position.z;
-            float speed = FsmVariables.GlobalVariables.FindFsmFloat("SpeedKMH").Value;
+            float tx;
+            float ty;
+            float tz;
+            if (_train != null)
+            {
+                tx = _train.transform.position.x;
+                ty = _train.transform.position.y;
+                tz = _train.transform.position.z;
+            } else
+            {
+                tx = -100;
+                ty = -100;
+                tz = -100;
+            }
 			float heading = _car.transform.eulerAngles.y;
             float pheading = _player.transform.eulerAngles.y;
-            float time = FsmVariables.GlobalVariables.FindFsmFloat("GlobalTime").Value;
+            string time12 = string.Format("{0:0}h{1:00}", this.Hour24, this.Minute);
+            string time24 = string.Format("{0:0}h{1:00}", this.Hour12, this.Minute);
 
-			return string.Concat("{", string.Format(@"""x"":{0},""y"":{1},""z"":{2},""time"":{3},""speed"":{4},""heading"":{5},""pheading"":{6},""px"":{7},""py"":{8},""pz"":{9}", x, y, z, time, speed, heading, pheading, px, py, pz), "}");
+            return string.Concat("{", string.Format(@"""x"":{0},""y"":{1},""z"":{2},""time24"":{3},""time12"":{4},""heading"":{5},""pheading"":{6},""px"":{7},""py"":{8},""pz"":{9},""tx"":{10},""ty"":{11},""tz"":{12}", x, y, z, time24, time12, heading, pheading, px, py, pz, tx, ty, tz), "}");
 		}
 
 		public string GetXmlContent()
@@ -218,12 +255,12 @@ namespace AlivieskaGpsServer
             node.InnerText = _player.transform.eulerAngles.y.ToString(CultureInfo.InvariantCulture);
             doc.DocumentElement.AppendChild(node);
 
-            node = doc.CreateElement("Speed");
-			node.InnerText = FsmVariables.GlobalVariables.FindFsmFloat("SpeedKMH").Value.ToString(CultureInfo.InvariantCulture);
+            node = doc.CreateElement("time24");
+			node.InnerText = string.Format("{0:0}h{1:00}", this.Hour24, this.Minute).ToString(CultureInfo.InvariantCulture);
 			doc.DocumentElement.AppendChild(node);
 
-			node = doc.CreateElement("Time");
-			node.InnerText = FsmVariables.GlobalVariables.FindFsmFloat("GlobalTime").Value.ToString(CultureInfo.InvariantCulture);
+			node = doc.CreateElement("time12");
+			node.InnerText = string.Format("{0:0}h{1:00}", this.Hour12, this.Minute).ToString(CultureInfo.InvariantCulture);
 			doc.DocumentElement.AppendChild(node);
 
             node = doc.CreateElement("PX");
@@ -236,6 +273,18 @@ namespace AlivieskaGpsServer
 
             node = doc.CreateElement("PZ");
             node.InnerText = _player.transform.position.z.ToString(CultureInfo.InvariantCulture);
+            doc.DocumentElement.AppendChild(node);
+
+            node = doc.CreateElement("TX");
+            node.InnerText = _train.transform.position.x.ToString(CultureInfo.InvariantCulture);
+            doc.DocumentElement.AppendChild(node);
+
+            node = doc.CreateElement("TY");
+            node.InnerText = _train.transform.position.y.ToString(CultureInfo.InvariantCulture);
+            doc.DocumentElement.AppendChild(node);
+
+            node = doc.CreateElement("TZ");
+            node.InnerText = _train.transform.position.z.ToString(CultureInfo.InvariantCulture);
             doc.DocumentElement.AppendChild(node);
 
             return doc.OuterXml;
@@ -438,6 +487,14 @@ namespace AlivieskaGpsServer
 			ConsoleCommand.Add(new GpsCommand(this));
 			_car = GameObject.Find("SATSUMA(557kg, 248)");
             _player = GameObject.Find("PLAYER");
+            _train = GameObject.Find("train");
+
+            _sun = GameObject.Find("SUN/Pivot");
+            _rot = _sun.GetComponent<PlayMakerFSM>().FsmVariables.FindFsmFloat("Rotation");
+
+            _transH = GameObject.Find("SuomiClock/Clock/hour/NeedleHour").transform;
+            _transM = GameObject.Find("SuomiClock/Clock/minute/NeedleMinute").transform;
+
             StartServer();
 		}
 
